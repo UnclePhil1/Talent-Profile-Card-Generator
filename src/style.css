@@ -1,0 +1,488 @@
+@import "./fonts.css";
+
+:root {
+  --font-bio: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-name: "Carrois Gothic SC", system-ui, sans-serif;
+  --font-display: "Carrois Gothic SC", system-ui, sans-serif;
+  --font-accent: "Edu NSW ACT Foundation", "Bricolage Grotesque", cursive;
+  --st-red: #ff3b24;
+  --st-red-soft: #ff5a44;
+  --st-red-deep: #d92a16;
+  --bg: #0a0a0b;
+  --bg-2: #0f0f11;
+  --panel: #121214;
+  --panel-2: #171719;
+  --line: #262629;
+  --line-soft: #1e1e21;
+  --text: #f4f4f5;
+  --text-dim: #a1a1aa;
+  --text-faint: #6b6b73;
+  --radius: 16px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Matrix rain canvas behind everything */
+#matrix-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.5;
+  pointer-events: none;
+}
+body::after {
+  /* vignette + fade so content stays readable */
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(255, 59, 36, 0.10), transparent 55%),
+    linear-gradient(180deg, rgba(10,10,11,0.55), rgba(10,10,11,0.9));
+}
+
+/* ---------- Topbar ---------- */
+.topbar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--line-soft);
+  background: rgba(10, 10, 11, 0.6);
+  backdrop-filter: blur(8px);
+}
+.brand { display: flex; align-items: center; gap: 11px; }
+.brand svg { display: block; }
+.brand-logo-img { height: 26px; width: auto; display: block; }
+.topbar-tag {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border: 1px solid var(--line);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+/* ---------- Layout ---------- */
+.layout {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(340px, 460px) minmax(0, 1fr);
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 28px 64px;
+}
+/* Tablet / stacked: one column, controls above preview */
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 22px; padding: 24px 20px 56px; }
+  .preview-stage { padding: 6px 0 22px; }
+}
+
+/* Small tablet / large phone */
+@media (max-width: 560px) {
+  .topbar { padding: 14px 16px; }
+  .layout { padding: 18px 14px 48px; gap: 18px; }
+  .panel { padding: 18px; }
+  .panel-title { font-size: 23px; }
+  .panel-sub { font-size: 15px; }
+}
+
+/* Phones */
+@media (max-width: 400px) {
+  .topbar-tag { display: none; }
+  .layout { padding: 14px 10px 40px; }
+  .panel { padding: 14px; }
+  .templates { gap: 8px; }
+  .tpl-option { padding: 8px; }
+  .tpl-swatch { height: 40px; }
+}
+
+.panel {
+  background: linear-gradient(180deg, var(--panel), var(--bg-2));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px;
+}
+.panel-title { margin: 0 0 8px; font-family: var(--font-display); font-size: 26px; font-weight: 400; letter-spacing: 0.01em; }
+.panel-sub { margin: 0 0 22px; font-family: var(--font-accent); color: var(--text-dim); font-size: 16px; line-height: 1.55; }
+
+/* ---------- Form ---------- */
+.field { display: block; margin-bottom: 18px; }
+.field-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.field-label em { font-style: normal; font-weight: 500; color: var(--text-faint); font-size: 12px; }
+
+input[type="text"], input[type="url"], textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 11px 13px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  resize: vertical;
+}
+input::placeholder, textarea::placeholder { color: var(--text-faint); }
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--st-red);
+  box-shadow: 0 0 0 3px rgba(255, 59, 36, 0.18);
+}
+
+.file-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.file-hint { font-size: 12px; color: var(--text-faint); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 11px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.05s, background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+.btn:hover { border-color: #3a3a3e; }
+.btn:active { transform: translateY(1px); }
+.btn.primary {
+  background: var(--st-red);
+  border-color: var(--st-red);
+  color: #fff;
+  box-shadow: 0 8px 24px -8px rgba(255, 59, 36, 0.6);
+}
+.btn.primary:hover { background: var(--st-red-soft); border-color: var(--st-red-soft); }
+.btn.ghost { background: transparent; }
+.btn.ghost.danger { color: var(--st-red-soft); border-color: transparent; }
+.btn.ghost.danger:hover { border-color: var(--line); }
+
+/* ---------- Template picker ---------- */
+.template-picker { margin-top: 24px; padding-top: 22px; border-top: 1px solid var(--line-soft); }
+.templates { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+.tpl-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 10px;
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+.tpl-option:hover { border-color: #3a3a3e; }
+.tpl-option.is-active { border-color: var(--st-red); background: rgba(255, 59, 36, 0.06); }
+.tpl-swatch { width: 100%; height: 46px; border-radius: 8px; margin-bottom: 6px; }
+.tpl-swatch--matrix {
+  background:
+    radial-gradient(80% 120% at 80% 0%, rgba(255,59,36,.5), transparent 60%),
+    linear-gradient(135deg, #141416, #050505);
+  border: 1px solid #2a2a2e;
+}
+.tpl-swatch--hero {
+  background:
+    linear-gradient(180deg, transparent 40%, #060606 66%),
+    radial-gradient(90% 130% at 75% 0%, rgba(255,59,36,.5), transparent 62%),
+    linear-gradient(135deg, #16161a, #0a0a0b);
+  border: 1px solid #2a2a2e;
+}
+.tpl-swatch--clean {
+  background: linear-gradient(135deg, #ffffff, #f1f1f3);
+  border: 1px solid #ddd;
+}
+.tpl-name { font-size: 13px; font-weight: 700; color: #ffffff; }
+.tpl-desc { font-size: 10.5px; color: var(--text-faint); }
+
+/* ---------- Preview ---------- */
+.preview { display: flex; flex-direction: column; align-items: center; }
+.preview-stage {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding: 18px 0 26px;
+}
+/* JS sizes this to the scaled card; overflow clips the scaler's untransformed
+   380x540 layout box so it can't force horizontal page scroll on small screens */
+#card-mount { overflow: hidden; }
+.preview-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.status { min-height: 18px; margin: 12px 0 0; font-size: 13px; color: var(--text-dim); }
+.status.ok { color: #4ade80; }
+.status.err { color: var(--st-red-soft); }
+
+/* =====================================================
+   CARD  (shared)  — fixed 380 x 540 export dimensions
+   ===================================================== */
+.card {
+  width: 380px;
+  height: 540px;
+  border-radius: 22px;
+  overflow: hidden;
+  position: relative;
+  font-family: var(--font);
+  display: flex;
+  flex-direction: column;
+  transform-origin: top center;
+}
+.card * { box-sizing: border-box; }
+
+/* wrapper scaled down (never up) to fit narrow screens; the .card inside keeps
+   its true 380x540 size so PNG exports stay full resolution */
+.card-scale {
+  width: 380px;
+  height: 540px;
+  transform-origin: top left;
+}
+
+.card-logo-img { height: 22px; width: auto; display: block; }
+
+.card-avatar {
+  width: 92px;
+  height: 92px;
+  border-radius: 20px;
+  object-fit: cover;
+  display: block;
+  background-size: cover;
+  background-position: center;
+}
+.card-monogram {
+  width: 92px;
+  height: 92px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.card-name {
+  font-family: var(--font-name);
+  font-size: 27px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.verified { width: 19px; height: 19px; flex: 0 0 auto; }
+.card-role {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.card-bio {
+  font-family: var(--font-bio);
+  font-size: 13.5px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.card-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+}
+.qr-tile {
+  background: #fff;
+  border-radius: 14px;
+  padding: 9px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+.qr-tile img, .qr-tile canvas { display: block; width: 96px; height: 96px; }
+.qr-caption { font-size: 10.5px; line-height: 1.35; font-weight: 600; }
+.qr-caption .muted { font-weight: 500; display: block; }
+
+/* ---------- Template: MATRIX (dark) ---------- */
+.card--matrix {
+  background: linear-gradient(160deg, #141416 0%, #0a0a0b 55%, #050505 100%);
+  color: #fff;
+  border: 1px solid #2a2a2e;
+  padding: 26px 24px;
+  justify-content: flex-start;
+  gap: 20px;
+}
+.card--matrix .card-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.32;
+}
+.card--matrix .card-glow {
+  position: absolute;
+  top: -40%;
+  right: -30%;
+  width: 90%;
+  height: 70%;
+  background: radial-gradient(circle, rgba(255,59,36,0.55), transparent 62%);
+  filter: blur(10px);
+  z-index: 0;
+}
+.card--matrix > * { position: relative; z-index: 1; }
+.card--matrix .card-top { display: flex; align-items: center; justify-content: space-between; }
+.card--matrix .card-logo .wm { color: #fff; }
+.card--matrix .pill {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #4ade80; border: 1px solid rgba(74,222,128,.4); border-radius: 999px; padding: 4px 10px;
+}
+.card--matrix .card-monogram {
+  background: linear-gradient(140deg, var(--st-red), var(--st-red-deep));
+  color: #fff;
+  box-shadow: 0 10px 30px -8px rgba(255,59,36,.6);
+}
+.card--matrix .card-avatar { border: 1px solid #2f2f34; }
+.card--matrix .card-role { color: var(--st-red-soft); }
+.card--matrix .card-bio { color: #c7c7cd; }
+.card--matrix .card-footer { margin-top: auto; }
+.card--matrix .qr-caption { color: #fff; }
+.card--matrix .qr-caption .muted { color: var(--text-faint); }
+.card--matrix .divider { height: 1px; background: linear-gradient(90deg, rgba(255,59,36,.6), transparent); }
+
+/* ---------- Template: CLEAN (light) ---------- */
+.card--clean {
+  background: #ffffff;
+  color: #0d0d0f;
+  border: 1px solid #e7e7ea;
+  box-shadow: 0 30px 60px -25px rgba(0,0,0,0.5);
+  padding: 0;
+  justify-content: flex-start;
+}
+.card--clean .clean-hero {
+  height: 8px;
+  background: linear-gradient(90deg, var(--st-red), var(--st-red-soft));
+}
+.card--clean .clean-body { padding: 26px 26px 24px; display: flex; flex-direction: column; gap: 18px; height: 100%; }
+.card--clean .card-top { display: flex; align-items: center; justify-content: space-between; }
+.card--clean .card-logo .wm { color: #0d0d0f; }
+.card--clean .pill {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--st-red-deep); background: rgba(255,59,36,.09); border-radius: 999px; padding: 4px 10px;
+}
+.card--clean .card-monogram {
+  background: linear-gradient(140deg, #17171a, #000);
+  color: #fff;
+}
+.card--clean .card-avatar { border: 1px solid #ececf0; }
+.card--clean .card-role { color: var(--st-red-deep); }
+.card--clean .card-bio { color: #52525b; }
+.card--clean .card-footer { margin-top: auto; padding-top: 6px; }
+.card--clean .qr-tile { border: 1px solid #ececf0; }
+.card--clean .qr-caption { color: #0d0d0f; }
+.card--clean .qr-caption .muted { color: #a1a1aa; }
+.card--clean .divider { height: 1px; background: #eee; }
+
+/* ---------- Template: HERO (KATA band → black fade) ---------- */
+.card--hero {
+  background: linear-gradient(180deg, #0b0b0d 0%, #070708 60%, #040404 100%);
+  color: #fff;
+  border: 1px solid #24242a;
+  padding: 0;
+  flex-direction: column;
+  gap: 0;
+}
+/* top band holding the katakana rain + logo */
+.card--hero .hero-band {
+  position: relative;
+  height: 172px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  padding: 24px 24px 0;
+}
+.card--hero .hero-band .card-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.55;
+}
+/* fade the bottom of the band into the black body */
+.card--hero .hero-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(85% 70% at 78% 8%, rgba(255,59,36,0.40), transparent 60%),
+    linear-gradient(180deg, rgba(11,11,13,0) 34%, rgba(11,11,13,0.65) 66%, #0b0b0d 100%);
+}
+.card--hero .hero-band .card-top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card--hero .pill {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #4ade80; border: 1px solid rgba(74,222,128,.4); border-radius: 999px; padding: 4px 10px;
+  background: rgba(6,6,8,0.35);
+}
+/* body sits on solid black, pulled up so the avatar straddles the fade line */
+.card--hero .hero-body {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 24px 28px; /* bottom padding keeps QR/caption off the card edge */
+}
+.card--hero .hero-avatar {
+  margin-top: -46px; /* top half of avatar overlaps the KATA band */
+}
+.card--hero .card-monogram {
+  background: linear-gradient(140deg, var(--st-red), var(--st-red-deep));
+  color: #fff;
+  box-shadow: 0 12px 34px -10px rgba(255,59,36,.7);
+  border: 2px solid #0b0b0d;
+}
+.card--hero .card-avatar { border: 2px solid #0b0b0d; box-shadow: 0 12px 34px -12px rgba(0,0,0,.8); }
+.card--hero .card-role { color: var(--st-red-soft); }
+.card--hero .card-bio { color: #c7c7cd; }
+.card--hero .card-footer { margin-top: auto; }
+.card--hero .qr-caption { color: #fff; }
+.card--hero .qr-caption .muted { color: var(--text-faint); }
+.card--hero .divider { height: 1px; background: linear-gradient(90deg, rgba(255,59,36,.6), transparent); }

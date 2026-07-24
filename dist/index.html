@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Talent Card Generator · Superteam</title>
+    <meta name="description" content="Generate a shareable Superteam Talent card with your name, role, bio and a QR code to your profile." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script type="module" crossorigin src="/assets/index-BEewA0O9.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BnHlR9JH.css">
+  </head>
+  <body>
+    <canvas id="matrix-bg" aria-hidden="true"></canvas>
+
+    <header class="topbar">
+      <div class="brand" id="brand-logo">logo injected</div>
+      <!-- <div class="brand">
+        <img class="brand-logo-img" src="/favicon.svg" alt="Superteam Talent logo" />
+      </div> -->
+      <div class="topbar-tag">Talent Profile Card Generator</div>
+    </header>
+
+    <main class="layout">
+      <!-- ============ CONTROLS ============ -->
+      <section class="panel controls" aria-label="Card details">
+        <h1 class="panel-title">Build your card</h1>
+        <p class="panel-sub">Fill in your details, pick a style, and download a shareable card for your Superteam Talent profile.</p>
+
+        <form id="card-form" autocomplete="off">
+          <label class="field">
+            <span class="field-label">Full name</span>
+            <input id="in-name" type="text" maxlength="32" placeholder="Philip Nssien" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Role</span>
+            <input id="in-role" type="text" maxlength="40" placeholder="Frontend Developer · DevRel" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Short bio <em id="bio-count">0/120</em></span>
+            <textarea id="in-bio" maxlength="120" rows="3" placeholder="Frontend dev who ships fast, user-friendly web apps and grows developer communities."></textarea>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Talent profile link <em>(becomes the QR code)</em></span>
+            <input id="in-link" type="url" inputmode="url" placeholder="https://app.talent.superteam.fun/p/..." />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Photo <em>(optional)</em></span>
+            <div class="file-row">
+              <input id="in-avatar" type="file" accept="image/*" hidden />
+              <button type="button" class="btn ghost" id="btn-upload">Upload photo</button>
+              <button type="button" class="btn ghost danger" id="btn-clear-avatar" hidden>Remove</button>
+              <span class="file-hint" id="file-hint">No file chosen — a monogram is used instead</span>
+            </div>
+          </label>
+        </form>
+
+        <div class="template-picker">
+          <span class="field-label">Card style</span>
+          <div class="templates" role="radiogroup" aria-label="Card style">
+            <button type="button" class="tpl-option is-active" data-tpl="matrix" role="radio" aria-checked="true">
+              <span class="tpl-swatch tpl-swatch--matrix"></span>
+              <span class="tpl-name">Matrix</span>
+              <span class="tpl-desc">Full KATA</span>
+            </button>
+            <button type="button" class="tpl-option" data-tpl="hero" role="radio" aria-checked="false">
+              <span class="tpl-swatch tpl-swatch--hero"></span>
+              <span class="tpl-name">Hero</span>
+              <span class="tpl-desc">KATA + fade</span>
+            </button>
+            <button type="button" class="tpl-option" data-tpl="clean" role="radio" aria-checked="false">
+              <span class="tpl-swatch tpl-swatch--clean"></span>
+              <span class="tpl-name">Clean</span>
+              <span class="tpl-desc">White</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PREVIEW ============ -->
+      <section class="panel preview" aria-label="Card preview">
+        <div class="preview-stage">
+          <div id="card-mount"><!-- card injected --></div>
+        </div>
+
+        <div class="preview-actions">
+          <button type="button" class="btn primary" id="btn-download">Download PNG</button>
+          <button type="button" class="btn" id="btn-copy">Copy image</button>
+        </div>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+
+  </body>
+</html>
