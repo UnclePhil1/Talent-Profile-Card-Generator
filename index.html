@@ -21,6 +21,7 @@
     <main class="layout">
       <!-- ============ CONTROLS ============ -->
       <section class="panel controls" aria-label="Card details">
+        <span class="eyebrow">Talent Card</span>
         <h1 class="panel-title">Build your card</h1>
         <p class="panel-sub">Fill in your details, pick a style, and download a shareable card for your Superteam Talent profile.</p>
 
@@ -80,13 +81,18 @@
 
       <!-- ============ PREVIEW ============ -->
       <section class="panel preview" aria-label="Card preview">
+        <div class="section-head">
+          <span class="section-title">Your card</span>
+          <span class="style-chip" id="active-style-label">Matrix</span>
+        </div>
+
         <div class="preview-stage">
           <div id="card-mount"><!-- card injected --></div>
         </div>
 
         <div class="preview-actions">
           <button type="button" class="btn primary" id="btn-download">Download PNG</button>
-          <button type="button" class="btn" id="btn-copy">Copy image</button>
+          <button type="button" class="btn outline" id="btn-copy">Copy image</button>
         </div>
         <p class="status" id="status" role="status" aria-live="polite"></p>
       </section>

@@ -50,10 +50,10 @@ const VERIFIED = `
  * State
  * ------------------------------------------------------------------ */
 const state = {
-  name: "Philip Nssien",
-  role: "Frontend Developer · DevRel",
-  bio: "Frontend dev who ships fast, user-friendly web apps and grows the developer communities behind them.",
-  link: "https://app.talent.superteam.fun/p/b5534137-0c5b-4b2a-86d3-8c3685f42f9c?sig=72ccfa68da390213",
+  name: "UnclePhil",
+  role: "Your Top Dev",
+  bio: "I ship cool stuff.",
+  link: "",
   avatar: null, // dataURL
   template: "matrix",
 };
@@ -61,11 +61,20 @@ const state = {
 /* ------------------------------------------------------------------ *
  * Matrix katakana rain
  * ------------------------------------------------------------------ */
-const KATA = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンABCDEF0123456789$SOLANA".split("");
+const KATA = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンABCDEF0123456789$".split("");
+// whole words that fall as readable vertical streams among the katakana
+const RAIN_WORDS = ["SOLANA", "TALENT", "EARN", "SUPERTEAM", "SOL"];
 
-function makeMatrix(canvas, { fontSize = 14, color = "#ff3b24", fade = 0.08, speed = 1 } = {}) {
+function makeMatrix(canvas, { fontSize = 14, color = "#ff3b24", fade = 0.08, speed = 1, wordChance = 0.26 } = {}) {
   const ctx = canvas.getContext("2d");
-  let cols, drops, raf, w, h, dpr, rows;
+  let cols, drops, colWord, raf, w, h, dpr, rows;
+
+  // each column is either random katakana or spells one of RAIN_WORDS vertically
+  function assignCol(i) {
+    colWord[i] = Math.random() < wordChance
+      ? RAIN_WORDS[(Math.random() * RAIN_WORDS.length) | 0]
+      : null;
+  }
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -81,6 +90,8 @@ function makeMatrix(canvas, { fontSize = 14, color = "#ff3b24", fade = 0.08, spe
     // spread heads across the FULL height so coverage is even from the first
     // frame (columns don't all start at the top) — fills the whole component.
     drops = Array.from({ length: cols }, () => Math.random() * rows);
+    colWord = new Array(cols);
+    for (let i = 0; i < cols; i++) assignCol(i);
     ctx.clearRect(0, 0, w, h);
     prewarm();
   }
@@ -90,12 +101,22 @@ function makeMatrix(canvas, { fontSize = 14, color = "#ff3b24", fade = 0.08, spe
     ctx.fillRect(0, 0, w, h);
     ctx.font = `${fontSize}px monospace`;
     for (let i = 0; i < cols; i++) {
-      const ch = KATA[(Math.random() * KATA.length) | 0];
+      const word = colWord[i];
+      let ch, lit;
+      if (word) {
+        // letter chosen by row index so the stream reads top-to-bottom
+        const row = Math.floor(drops[i]);
+        ch = word[((row % word.length) + word.length) % word.length];
+        lit = true;
+      } else {
+        ch = KATA[(Math.random() * KATA.length) | 0];
+        lit = false;
+      }
       const x = i * fontSize;
       const y = drops[i] * fontSize;
-      ctx.fillStyle = Math.random() > 0.975 ? "#ffd0c8" : color;
+      ctx.fillStyle = Math.random() > 0.975 ? "#ffd6cd" : (lit ? "#ff7f66" : color);
       ctx.fillText(ch, x, y);
-      if (y > h && Math.random() > 0.94) drops[i] = 0;
+      if (y > h && Math.random() > 0.94) { drops[i] = 0; assignCol(i); }
       drops[i] += 0.5;
     }
   }
@@ -320,6 +341,11 @@ $("btn-clear-avatar").addEventListener("click", () => {
 });
 
 /* Template picker */
+function updateStyleLabel() {
+  const active = document.querySelector(".tpl-option.is-active .tpl-name");
+  const label = $("active-style-label");
+  if (active && label) label.textContent = active.textContent;
+}
 document.querySelectorAll(".tpl-option").forEach((btn) => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tpl-option").forEach((b) => {
@@ -327,9 +353,11 @@ document.querySelectorAll(".tpl-option").forEach((btn) => {
       b.setAttribute("aria-checked", b === btn ? "true" : "false");
     });
     state.template = btn.dataset.tpl;
+    updateStyleLabel();
     render();
   });
 });
+updateStyleLabel();
 
 /* ------------------------------------------------------------------ *
  * Export

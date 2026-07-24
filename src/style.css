@@ -17,7 +17,8 @@
   --text: #f4f4f5;
   --text-dim: #a1a1aa;
   --text-faint: #6b6b73;
-  --radius: 16px;
+  --radius: 10px;      /* boxy panels, Superteam-style */
+  --radius-sm: 7px;    /* inputs, buttons, tiles */
   --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -124,13 +125,70 @@ body::after {
 }
 
 .panel {
-  background: linear-gradient(180deg, var(--panel), var(--bg-2));
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 26px;
+  padding: 24px;
 }
 .panel-title { margin: 0 0 8px; font-family: var(--font-display); font-size: 26px; font-weight: 400; letter-spacing: 0.01em; }
 .panel-sub { margin: 0 0 22px; font-family: var(--font-accent); color: var(--text-dim); font-size: 16px; line-height: 1.55; }
+
+/* Superteam-style section header: uppercase label + red action link */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--st-red);
+  margin: 0 0 10px;
+}
+.eyebrow::before {
+  content: "";
+  width: 12px; height: 12px;
+  border-radius: 3px;
+  background: var(--st-red);
+  box-shadow: 0 0 12px -1px var(--st-red);
+}
+.section-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.section-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.section-action {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--st-red);
+}
+.section-action::after { content: " ›"; }
+/* small red chip, e.g. the active card style */
+.style-chip {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--st-red-soft);
+  border: 1px solid rgba(255, 59, 36, 0.45);
+  background: rgba(255, 59, 36, 0.08);
+  border-radius: 999px;
+  padding: 4px 11px;
+}
 
 /* ---------- Form ---------- */
 .field { display: block; margin-bottom: 18px; }
@@ -138,18 +196,20 @@ body::after {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-dim);
   margin-bottom: 8px;
 }
-.field-label em { font-style: normal; font-weight: 500; color: var(--text-faint); font-size: 12px; }
+.field-label em { font-style: normal; font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--text-faint); font-size: 11.5px; }
 
 input[type="text"], input[type="url"], textarea {
   width: 100%;
   background: var(--bg);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   color: var(--text);
   font-family: inherit;
   font-size: 14px;
@@ -167,29 +227,42 @@ input:focus, textarea:focus {
 .file-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .file-hint { font-size: 12px; color: var(--text-faint); }
 
-/* ---------- Buttons ---------- */
+/* ---------- Buttons (Superteam style: boxy, uppercase) ---------- */
 .btn {
   appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   border: 1px solid var(--line);
   background: var(--panel-2);
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   padding: 11px 18px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: transform 0.05s, background 0.15s, border-color 0.15s, opacity 0.15s;
+  transition: transform 0.05s, background 0.15s, border-color 0.15s, color 0.15s;
 }
 .btn:hover { border-color: #3a3a3e; }
 .btn:active { transform: translateY(1px); }
+/* solid red — primary call to action */
 .btn.primary {
   background: var(--st-red);
   border-color: var(--st-red);
   color: #fff;
-  box-shadow: 0 8px 24px -8px rgba(255, 59, 36, 0.6);
 }
 .btn.primary:hover { background: var(--st-red-soft); border-color: var(--st-red-soft); }
+/* red outline — secondary action, like ST "MARK AS READ" */
+.btn.outline {
+  background: transparent;
+  border-color: rgba(255, 59, 36, 0.55);
+  color: var(--st-red-soft);
+}
+.btn.outline:hover { border-color: var(--st-red); background: rgba(255, 59, 36, 0.08); }
 .btn.ghost { background: transparent; }
 .btn.ghost.danger { color: var(--st-red-soft); border-color: transparent; }
 .btn.ghost.danger:hover { border-color: var(--line); }
@@ -205,14 +278,15 @@ input:focus, textarea:focus {
   padding: 10px;
   background: var(--bg);
   border: 1.5px solid var(--line);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   text-align: left;
   transition: border-color 0.15s, background 0.15s;
 }
 .tpl-option:hover { border-color: #3a3a3e; }
 .tpl-option.is-active { border-color: var(--st-red); background: rgba(255, 59, 36, 0.06); }
-.tpl-swatch { width: 100%; height: 46px; border-radius: 8px; margin-bottom: 6px; }
+.tpl-swatch { width: 100%; height: 46px; border-radius: 5px; margin-bottom: 6px; }
+.tpl-name { text-transform: uppercase; letter-spacing: 0.05em; }
 .tpl-swatch--matrix {
   background:
     radial-gradient(80% 120% at 80% 0%, rgba(255,59,36,.5), transparent 60%),
