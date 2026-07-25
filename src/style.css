@@ -329,7 +329,7 @@ input:focus, textarea:focus {
 .card {
   width: 380px;
   height: 540px;
-  border-radius: 22px;
+  border-radius: 0;
   overflow: hidden;
   position: relative;
   font-family: var(--font);
@@ -352,7 +352,7 @@ input:focus, textarea:focus {
 .card-avatar {
   width: 92px;
   height: 92px;
-  border-radius: 20px;
+  border-radius: 0;
   object-fit: cover;
   display: block;
   background-size: cover;
@@ -361,7 +361,7 @@ input:focus, textarea:focus {
 .card-monogram {
   width: 92px;
   height: 92px;
-  border-radius: 20px;
+  border-radius: 0;
   display: grid;
   place-items: center;
   font-size: 38px;
@@ -400,7 +400,7 @@ input:focus, textarea:focus {
 }
 .qr-tile {
   background: #fff;
-  border-radius: 14px;
+  border-radius: 0;
   padding: 9px;
   display: grid;
   place-items: center;
@@ -442,7 +442,7 @@ input:focus, textarea:focus {
 .card--matrix .card-logo .wm { color: #fff; }
 .card--matrix .pill {
   font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-  color: #4ade80; border: 1px solid rgba(74,222,128,.4); border-radius: 999px; padding: 4px 10px;
+  color: #4ade80; border: 1px solid rgba(74,222,128,.4); border-radius: 0; padding: 4px 10px;
 }
 .card--matrix .card-monogram {
   background: linear-gradient(140deg, var(--st-red), var(--st-red-deep));
@@ -475,7 +475,7 @@ input:focus, textarea:focus {
 .card--clean .card-logo .wm { color: #0d0d0f; }
 .card--clean .pill {
   font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--st-red-deep); background: rgba(255,59,36,.09); border-radius: 999px; padding: 4px 10px;
+  color: var(--st-red-deep); background: rgba(255,59,36,.09); border-radius: 0; padding: 4px 10px;
 }
 .card--clean .card-monogram {
   background: linear-gradient(140deg, #17171a, #000);
@@ -531,7 +531,7 @@ input:focus, textarea:focus {
 }
 .card--hero .pill {
   font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-  color: #4ade80; border: 1px solid rgba(74,222,128,.4); border-radius: 999px; padding: 4px 10px;
+  color: #4ade80; border: 1px solid rgba(74,222,128,.4); border-radius: 0; padding: 4px 10px;
   background: rgba(6,6,8,0.35);
 }
 /* body sits on solid black, pulled up so the avatar straddles the fade line */
